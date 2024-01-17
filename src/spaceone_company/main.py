@@ -1,5 +1,6 @@
+from typing import Generator
 from spaceone.inventory.plugin.collector.lib.server import CollectorPluginServer
-from manager.member_manager import MemberManager
+from spaceone_company.manager.member_manager import MemberManager
 
 app = CollectorPluginServer()
 
@@ -37,16 +38,11 @@ def collector_verify(params: dict) -> None:
     Returns:
         None
     """
-    options = params["options"]
-    secret_data = params["secret_data"]
-    schema = params.get("schema")
-
-    member_mgr = MemberManager()
-    return member_mgr.collect_resources(options, secret_data, schema)
+    pass
 
 
 @app.route('Collector.collect')
-def collector_collect(params: dict) -> dict:
+def collector_collect(params: dict) -> Generator[dict, None, None]:
     """ Collect external data
 
     Args:
@@ -111,7 +107,12 @@ def collector_collect(params: dict) -> dict:
 
         Only one of the cloud_service_type, cloud_service and region fields is required.
     """
-    pass
+    options = params["options"]
+    secret_data = params["secret_data"]
+    schema = params.get("schema")
+
+    member_mgr = MemberManager()
+    return member_mgr.collect_resources(options, secret_data, schema)
 
 
 @app.route('Job.get_tasks')
