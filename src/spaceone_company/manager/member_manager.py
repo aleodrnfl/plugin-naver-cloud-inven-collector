@@ -1,7 +1,7 @@
 import logging
 from spaceone.core.manager import BaseManager
 from spaceone.inventory.plugin.collector.lib import *
-from ..connector.member_connector import MemberConnector
+from spaceone_company.connector.member_connector import MemberConnector
 
 _LOGGER = logging.getLogger("cloudforet")
 
@@ -13,7 +13,7 @@ class MemberManager(BaseManager):
         self.cloud_service_group = "SpaceONE"
         self.cloud_service_type = "Member"
         self.provider = "spaceone_company"
-        self.metadata_path = "metadata/spaceone/member.yaml"
+        self.metadata_path = "meteadata/spaceone/member.yaml"
 
     def collect_resources(self, options, secret_data, schema):
         try:
