@@ -17,11 +17,10 @@ class TestCollectExample(TestCase):
         print_json(v_info)
 
     def test_collect(self):
-        options = {'asdfds':1233}
-        params = {"options": options, "secret_data": {'asdf':123}}
+        options = {}
+        params = {"options": options, "secret_data": {}}
 
         res_stream = self.inventory.Collector.collect(params)
+
         for res in res_stream:
             print_json(res)
-
-
