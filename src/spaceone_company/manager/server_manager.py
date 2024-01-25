@@ -1,19 +1,19 @@
 import logging
 from spaceone.core.manager import BaseManager
 from spaceone.inventory.plugin.collector.lib import *
-from spaceone_company.connector.member_connector import MemberConnector
+from spaceone_company.connector.server_connector import ServerConnector
 
 _LOGGER = logging.getLogger("cloudforet")
 
 
-class MemberManager(BaseManager):
+class ServerManager(BaseManager):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.cloud_service_group = "SpaceONE"
-        self.cloud_service_type = "Member"
-        self.provider = "spaceone_company"
-        self.metadata_path = "meteadata/spaceone/member.yaml"
+        self.cloud_service_type = "Server"
+        self.provider = "naver cloud"
+        self.metadata_path = "meteadata/spaceone/server.yaml"
 
     def collect_resources(self, options, secret_data, schema):
         try:
@@ -44,15 +44,15 @@ class MemberManager(BaseManager):
         )
 
     def collect_cloud_service(self, options, secret_data, schema):
-        member_connector = MemberConnector(secret_data)
-        spaceone_members = member_connector.list_members()
-        for spaceone_member in spaceone_members["members_info"]:
+        server_connector = ServerConnector(secret_data=secret_data)
+        server_instances = server_connector.list_server_instance()
+        for server_instance in server_instances:
             cloud_service = make_cloud_service(
-                name=spaceone_member["name"],
+                name=server_instance["server_name"],
                 cloud_service_type=self.cloud_service_type,
                 cloud_service_group=self.cloud_service_group,
                 provider=self.provider,
-                data=spaceone_member,
+                data=server_instance,
             )
             yield make_response(
                 cloud_service=cloud_service,

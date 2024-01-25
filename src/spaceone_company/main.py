@@ -1,6 +1,7 @@
 from typing import Generator
 from spaceone.inventory.plugin.collector.lib.server import CollectorPluginServer
 from spaceone_company.manager.member_manager import MemberManager
+from spaceone_company.manager.server_manager import ServerManager
 
 app = CollectorPluginServer()
 
@@ -111,8 +112,9 @@ def collector_collect(params: dict) -> Generator[dict, None, None]:
     secret_data = params["secret_data"]
     schema = params.get("schema")
 
-    member_mgr = MemberManager()
-    return member_mgr.collect_resources(options, secret_data, schema)
+    # member_mgr = MemberManager()
+    server_mgr = ServerManager()
+    return server_mgr.collect_resources(options, secret_data, schema)
 
 
 @app.route('Job.get_tasks')
