@@ -113,7 +113,8 @@ def collector_collect(params: dict) -> Generator[dict, None, None]:
     schema = params.get("schema")
 
     # member_mgr = MemberManager()
-    server_mgr = ServerManager()
+    # return member_mgr.collect_cloud_service(options, secret_data, schema)
+    server_mgr = ServerManager(secret_data=secret_data)
     return server_mgr.collect_resources(options, secret_data, schema)
 
 

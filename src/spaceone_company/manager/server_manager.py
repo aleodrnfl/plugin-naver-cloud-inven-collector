@@ -1,3 +1,4 @@
+import json
 import logging
 from spaceone.core.manager import BaseManager
 from spaceone.inventory.plugin.collector.lib import *
@@ -13,7 +14,7 @@ class ServerManager(BaseManager):
         self.cloud_service_group = "SpaceONE"
         self.cloud_service_type = "Server"
         self.provider = "naver cloud"
-        self.metadata_path = "meteadata/spaceone/server.yaml"
+        self.metadata_path = "metadata/spaceone/server.yaml"
 
     def collect_resources(self, options, secret_data, schema):
         try:
@@ -47,12 +48,13 @@ class ServerManager(BaseManager):
         server_connector = ServerConnector(secret_data=secret_data)
         server_instances = server_connector.list_server_instance()
         for server_instance in server_instances:
+            server_instance_dict = server_instance.__dict__
             cloud_service = make_cloud_service(
-                name=server_instance["server_name"],
+                name="sa",
                 cloud_service_type=self.cloud_service_type,
                 cloud_service_group=self.cloud_service_group,
                 provider=self.provider,
-                data=server_instance,
+                data=server_instance_dict,
             )
             yield make_response(
                 cloud_service=cloud_service,
