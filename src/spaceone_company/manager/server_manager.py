@@ -1,10 +1,52 @@
-import json
 import logging
 from spaceone.core.manager import BaseManager
 from spaceone.inventory.plugin.collector.lib import *
 from spaceone_company.connector.server_connector import ServerConnector
 
 _LOGGER = logging.getLogger("cloudforet")
+
+
+def get_compute_data(instance):
+    compute_data = {
+        'server_instance_no': instance.server_instance_no,
+        'server_image_name': instance.server_image_name,
+        'server_instance_status': instance.server_instance_status.code,
+        'server_instance_operation': instance.server_instance_operation.code,
+        'server_instance_status_name': instance.server_instance_status_name,
+        'platform_type': instance.platform_type.code_name,
+        'create_date': instance.create_date,
+        'uptime': instance.uptime,
+        'server_image_product_code': instance.server_image_product_code,
+        'server_product_code': instance.server_product_code,
+        'server_instance_type': instance.server_instance_type.code,
+        'zone': instance.zone.zone_name
+    }
+    return compute_data
+
+
+def get_hardware_data(instance):
+    hardware_data = {
+        'cpu_count': instance.cpu_count,
+        'memory_size': instance.memory_size
+    }
+    return hardware_data
+
+
+def get_port_forwarding_rules_data(instance):
+    port_forwarding_rules_data = {
+        'port_forwarding_external_port': instance.port_forwarding_external_port,
+        'port_forwarding_internal_port': instance.port_forwarding_internal_port,
+        'port_forwarding_public_ip': instance.port_forwarding_public_ip
+    }
+    return port_forwarding_rules_data
+
+
+def get_ip_data(instance):
+    ip_data = {
+        'private_ip': instance.private_ip,
+        'public_ip': instance.public_ip
+    }
+    return ip_data
 
 
 class ServerManager(BaseManager):
@@ -48,13 +90,26 @@ class ServerManager(BaseManager):
         server_connector = ServerConnector(secret_data=secret_data)
         server_instances = server_connector.list_server_instance()
         for server_instance in server_instances:
-            server_instance_dict = server_instance.__dict__
+            compute_data = get_compute_data(server_instance)
+            hardware_data = get_hardware_data(server_instance)
+            port_forwarding_rules_data = get_port_forwarding_rules_data(server_instance)
+            ip_data = get_ip_data(server_instance)
+
+            server_data = {
+                'compute': compute_data,
+                'hardware': hardware_data,
+                'port_forwarding_rules': port_forwarding_rules_data,
+                'ip': ip_data
+            }
+
             cloud_service = make_cloud_service(
-                name="sa",
+                name=server_instance.server_name,
+                instance_type=server_instance.server_instance_type.code,
+                region_code=server_instance.region.region_name,
                 cloud_service_type=self.cloud_service_type,
                 cloud_service_group=self.cloud_service_group,
                 provider=self.provider,
-                data=server_instance_dict,
+                data=server_data,
             )
             yield make_response(
                 cloud_service=cloud_service,
