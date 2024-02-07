@@ -2,7 +2,7 @@ from typing import Generator
 from spaceone.inventory.plugin.collector.lib.server import CollectorPluginServer
 from spaceone_company.manager.member_manager import MemberManager
 from spaceone_company.manager.server_manager import ServerManager
-
+from spaceone_company.manager.insight_manager import InsightManager
 app = CollectorPluginServer()
 
 
@@ -112,11 +112,13 @@ def collector_collect(params: dict) -> Generator[dict, None, None]:
     secret_data = params["secret_data"]
     schema = params.get("schema")
 
-    # member_mgr = MemberManager()
-    # return member_mgr.collect_cloud_service(options, secret_data, schema)
+
+    member_mgr = MemberManager()
+    return member_mgr.collect_cloud_service(options, secret_data, schema)
     server_mgr = ServerManager(secret_data=secret_data)
     return server_mgr.collect_resources(options, secret_data, schema)
-
+    insight_mgr = InsightManager(secret_data=secret_data)
+    return insight_mgr.collect_resources(options, secret_data)
 
 @app.route('Job.get_tasks')
 def job_get_tasks(params: dict) -> dict:
