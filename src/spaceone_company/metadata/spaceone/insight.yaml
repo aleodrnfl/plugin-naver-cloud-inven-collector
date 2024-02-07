@@ -1,0 +1,17 @@
+search:
+  fields:
+    - Dashboard ID: data.id
+    - Dashboard Name: data.name
+
+table:
+  sort:
+  fields:
+    - Dashboard ID: data.id
+    - Dashboard Name: data.name
+
+tabs.0:
+  name: Details
+  type: item
+  fields:
+    - Dashboard ID: data.id
+    - Dashboard Name: data.name
