@@ -1,0 +1,25 @@
+search:
+  fields:
+    - Metric ID: data.id
+    - Part: data.part
+    - Email: data.email
+    - Join Date: data.join_date
+
+table:
+  sort:
+    key: data.id
+    desc: false
+  fields:
+    - Metric ID: data.id
+    - Part: data.part
+    - Email: data.email
+    - Join Date: data.join_date
+
+tabs.0:
+  name: Details
+  type: item
+  fields:
+    - Metric ID: data.id
+    - Part: data.part
+    - Email: data.email
+    - Join Date: data.join_date
