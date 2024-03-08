@@ -56,7 +56,7 @@ class MetricConnector(BaseConnector):
         else:
             print(f"Error: {response.status_code}, {response.text}")
 
-        return metric_list
+        return data
 
     def get_metric_group_list(self):
         metric_group_list = []
@@ -87,4 +87,4 @@ class MetricConnector(BaseConnector):
             # print(metric_group_list)
         else:
             print(f"Error: {response.status_code}, {response.text}")
-        return metric_group_list
+        return data
